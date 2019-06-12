@@ -69,29 +69,39 @@ export default ({
   likeCount,
   isLiked,
   createdAt
-}) => (
-  <Post>
-    <Header>
-      <Avatar size="sm" url={avatar} />
-      <UserColumn>
-        <FatText text={username} />
-        <Location>{location}</Location>
-      </UserColumn>
-    </Header>
-    <Files>
-      {files && files.map(file => <File key={file.id} src={file.url} />)}
-    </Files>
-    <Meta>
-      <Buttons>
-        <Button>{isLiked ? <HeartFull /> : <HeartEmpty />}</Button>
-        <Button>
-          <Comment />
-        </Button>
-      </Buttons>
-      {likeCount !== 0 && (
-        <FatText text={likeCount === 1 ? "1 like" : `${likeCount} likes`} />
-      )}
-      <Timestamp>{createdAt}</Timestamp>
-    </Meta>
-  </Post>
-);
+}) => {
+  const year = createdAt.substring(0, 4);
+  const month = createdAt.substring(5, 7);
+  const day = createdAt.substring(8, 10);
+  const hour = parseInt(createdAt.substring(11, 13)) + 9;
+  const min = createdAt.substring(14, 16);
+
+  return (
+    <Post>
+      <Header>
+        <Avatar size="sm" url={avatar} />
+        <UserColumn>
+          <FatText text={username} />
+          <Location>{location}</Location>
+        </UserColumn>
+      </Header>
+      <Files>
+        {files && files.map(file => <File key={file.id} src={file.url} />)}
+      </Files>
+      <Meta>
+        <Buttons>
+          <Button>{isLiked ? <HeartFull /> : <HeartEmpty />}</Button>
+          <Button>
+            <Comment />
+          </Button>
+        </Buttons>
+        {likeCount !== 0 && (
+          <FatText text={likeCount === 1 ? "1 like" : `${likeCount} likes`} />
+        )}
+        <Timestamp>
+          {year}년 {month}월 {day}일 {hour > 23 ? hour - 24 : hour}:{min}
+        </Timestamp>
+      </Meta>
+    </Post>
+  );
+};
