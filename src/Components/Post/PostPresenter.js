@@ -9,6 +9,7 @@ const Post = styled.div`
   ${props => props.theme.whiteBox};
   width: 100%;
   max-width: 600px;
+  user-select: none;
   margin-bottom: 25px;
 `;
 
@@ -97,7 +98,8 @@ export default ({
   isLiked,
   createdAt,
   newComment,
-  currentItem
+  currentItem,
+  toggleLike
 }) => {
   const year = createdAt.substring(0, 4);
   const month = createdAt.substring(5, 7);
@@ -126,7 +128,9 @@ export default ({
       </Files>
       <Meta>
         <Buttons>
-          <Button>{isLiked ? <HeartFull /> : <HeartEmpty />}</Button>
+          <Button onClick={toggleLike}>
+            {isLiked ? <HeartFull /> : <HeartEmpty />}
+          </Button>
           <Button>
             <Comment />
           </Button>
