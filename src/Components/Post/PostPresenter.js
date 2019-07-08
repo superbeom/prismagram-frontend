@@ -111,8 +111,9 @@ export default ({
   newComment,
   currentItem,
   toggleLike,
-  onKeyUp,
-  comments
+  onKeyPress,
+  comments,
+  selfComments
 }) => {
   const year = createdAt.substring(0, 4);
   const month = createdAt.substring(5, 7);
@@ -159,6 +160,12 @@ export default ({
                 {comment.text}
               </Comment>
             ))}
+            {selfComments.map(comment => (
+              <Comment key={comment.id}>
+                <FatText text={comment.user.username} />
+                {comment.text}
+              </Comment>
+            ))}
           </Comments>
         )}
         <Timestamp>
@@ -168,7 +175,7 @@ export default ({
           placeholder="Add a comment..."
           value={newComment.value}
           onChange={newComment.onChange}
-          onKeyUp={onKeyUp}
+          onKeyPress={onKeyPress}
         />
       </Meta>
     </Post>

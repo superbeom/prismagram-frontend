@@ -4,6 +4,7 @@ import useInput from "../../Hooks/useInput";
 import PostPresenter from "./PostPresenter";
 import { useMutation } from "react-apollo-hooks";
 import { TOGGLE_LIKE, ADD_COMMENT } from "./PostQueries";
+import { toast } from "react-toastify";
 
 const PostContainer = ({
   id,
@@ -19,6 +20,7 @@ const PostContainer = ({
   const [likeCountS, setLikeCount] = useState(likeCount);
   const [isLikedS, setIsLiked] = useState(isLiked);
   const [currentItem, setCurrentItem] = useState(0);
+  const [selfComments, setSelfComments] = useState([]);
   const comment = useInput("");
 
   const toggleLikeMutation = useMutation(TOGGLE_LIKE, {
@@ -53,12 +55,19 @@ const PostContainer = ({
     }
   };
 
-  const onKeyUp = e => {
-    const { keyCode } = e;
-    if (keyCode === 13) {
-      e.preventDefault();
-      addCommentMutation();
-      comment.setValue("");
+  const onKeyPress = async event => {
+    const { which } = event;
+    if (which === 13) {
+      event.preventDefault();
+      try {
+        const {
+          data: { addComment }
+        } = await addCommentMutation();
+        setSelfComments([...selfComments, addComment]);
+        comment.setValue("");
+      } catch {
+        toast.error("Can't send your comment");
+      }
     }
   };
 
@@ -77,7 +86,8 @@ const PostContainer = ({
       setIsLiked={setIsLiked}
       currentItem={currentItem}
       toggleLike={toggleLike}
-      onKeyUp={onKeyUp}
+      onKeyPress={onKeyPress}
+      selfComments={selfComments}
     />
   );
 };
