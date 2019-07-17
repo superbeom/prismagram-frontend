@@ -11,11 +11,12 @@ export const resolvers = {
           isLoggedIn: true
         }
       });
+      window.location.reload();
       return null;
     },
     logUserOut: () => {
       localStorage.removeItem("token");
-      window.location.reload();
+      window.location = "/";
       return null;
     }
   }
